@@ -28,7 +28,7 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: inherit;}
 	display: flex;
 	flex-direction: column;
 	flex: 1 0 50%;
-	border: 1px solid red;	
+	
 }
 .text {
 	text-align: center;
@@ -89,7 +89,7 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: inherit;}
 	display: flex;
 	flex-direction: column;
 	flex: 1 0 50%;
-	border: 1px solid red;
+	
 }
 .knead-container {
 	position: absolute;
@@ -107,7 +107,7 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: inherit;}
 }
 .tracker {
 	flex: 1 0 100%;
-	border: 1px solid white;
+	
 	height: 20vh;
 	display: flex;
 	justify-content: center;
@@ -116,42 +116,71 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: inherit;}
 	flex: 1 1 33%;
 	display: flex;
 	flex-direction: column;
-	border: 1px solid green;
+	
 }
 .counters {
 	width: 100%;
 	flex: 1;
 	display: flex;
 	align-items: center;
+	gap: 20%;
 	justify-content: center;
-	border: 1px solid red;
+	
 }
 .green {
-	/* width: 10%;
-	height: 10%;
-	background-color: green; */
+	width: 40px;
+	height: 40px;
+	background-color: green;
+	border-radius: 50%;
+	text-align: center;
+	line-height: 40px;
+	color: #ffffff;
+	font-size: 20px;
 }
 .brown {
+	width: 40px;
+	height: 40px;
+	background-color: brown;
+	border-radius: 50%;
+	text-align: center;
+	line-height: 40px;
+	color: #ffffff;
+	font-size: 20px;
 }
 .blue {
+	width: 40px;
+	height: 40px;
+	background-color: blue;
+	border-radius: 50%;
+	text-align: center;
+	line-height: 40px;
+	color: #ffffff;
+	font-size: 20px;
 }
-.second-stage {
-}
-.third-stage {
-}
-
 
 .deck {
 	flex: 1 0 50%;
-	border: 1px solid white;
+	
 	height: 60vh;
-
+	display: flex;
+	justify-content: center;
+	align-self: center;
+}
+.deck-shirt {
+	width: 70%;
+	
+}
+.open-card-container {
+	flex: 1 0 50%;
+	
+	height: 60vh;
+	display: flex;
+	justify-content: center;
+	align-self: center;
 }
 .open-card {
-	flex: 1 0 50%;
-	border: 1px solid white;
-	height: 60vh;
-
+	width: 70%;
+	
 }
 .hider {
 	display: none;
