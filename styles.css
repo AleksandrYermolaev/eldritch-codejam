@@ -123,7 +123,7 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: inherit;}
 	flex: 1;
 	display: flex;
 	align-items: center;
-	gap: 20%;
+	gap: 10%;
 	justify-content: center;
 	
 }
@@ -168,7 +168,7 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: inherit;}
 }
 .deck-shirt {
 	width: 70%;
-	
+	cursor: pointer;
 }
 .open-card-container {
 	flex: 1 0 50%;
