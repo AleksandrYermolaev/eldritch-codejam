@@ -3,10 +3,10 @@ import brownCardsData from '/data/MythicCards/brown/index.js';
 import greenCardsData from '/data/MythicCards/green/index.js';
 import ancientsData from '/data/ancients.js';
 //Функция замеса колоды - перемешиваем архив
-function shuffle (array) {
-	for (let i = array.length - 1; i > 0; i--) {
+function shuffle (deck) {
+	for (let i = deck.length - 1; i > 0; i--) {
 		let j = Math.floor(Math.random() * (i + 1));
-		[array[i], array[j]] = [array[j], array[i]];
+		[deck[i], deck[j]] = [deck[j], deck[i]];
 	}
 }
 //Функция сбора общей колоды в для очень легкой сложности
@@ -27,20 +27,6 @@ function getSimpleDeck (data, output) {
 		}
 	});
 }
-//Функция определения количества карт для древнего
-// function getAncientCardsQuantity (ancient) {
-// 	let greenQuantity,
-// 		brownQuantity,
-// 		blueQuantity;
-// 	ancientsData.forEach(value => {
-// 		if (value.id === ancient) {
-// 			greenQuantity = value.firstStage.greenCards + value.secondStage.greenCards + value.thirdStage.greenCards;
-// 			brownQuantity = value.firstStage.brownCards + value.secondStage.brownCards + value.thirdStage.brownCards;
-// 			blueQuantity = value.firstStage.blueCards + value.secondStage.blueCards + value.thirdStage.blueCards;
-// 		}
-// 	});
-// 	return [greenQuantity, brownQuantity, blueQuantity];
-// }
 //Функция сбора колод по стадиям
 function getStageDecks (ancient) {
 	ancientsData.forEach(value => {
@@ -96,6 +82,7 @@ function getStageDecks (ancient) {
 		}
 	});
 }
+//Функция заполнения трекера
 function setTracker (ancient) {
 	ancientsData.forEach(value => {
 		if (value.id === ancient) {
@@ -111,7 +98,88 @@ function setTracker (ancient) {
 		}
 	});
 }
-
+//Функция выкладывания карт из деки и изменение трекера
+function getCardsOn () {
+//Изменение значений трекера и получение ссылки на карту
+let currentCardUrl;
+//Первая стадия
+if (stageOneCards.length > 0) {
+	let currentCard = stageOneCards.shift()
+	console.log(currentCard);
+	greenCardsData.forEach(value => {
+		if (value.id === currentCard) {
+			currentCardUrl = value.cardFace;
+			trackGreenFirst.textContent -= 1;
+		}
+	});
+	brownCardsData.forEach(value => {
+		if (value.id === currentCard) {
+			currentCardUrl = value.cardFace;
+			trackBrownFirst.textContent -= 1;
+		}
+	});
+	blueCardsData.forEach(value => {
+		if (value.id === currentCard) {
+			currentCardUrl = value.cardFace;
+			trackBlueFirst.textContent -= 1;
+		}
+	});
+//Если первая стадия закончилась - начинается вторая
+} else if (stageTwoCards.length > 0) {
+	let currentCard = stageTwoCards.shift()
+	console.log(currentCard);
+	greenCardsData.forEach(value => {
+		if (value.id === currentCard) {
+			currentCardUrl = value.cardFace;
+			trackGreenSecond.textContent -= 1;
+		}
+	});
+	brownCardsData.forEach(value => {
+		if (value.id === currentCard) {
+			currentCardUrl = value.cardFace;
+			trackBrownSecond.textContent -= 1;
+		}
+	});
+	blueCardsData.forEach(value => {
+		if (value.id === currentCard) {
+			currentCardUrl = value.cardFace;
+			trackBlueSecond.textContent -= 1;
+		}
+	});
+//Если вторая стадия закончилась - начинается третья
+} else if (stageThreeCards.length > 0) {
+	let currentCard = stageThreeCards.shift()
+	console.log(currentCard);
+	greenCardsData.forEach(value => {
+		if (value.id === currentCard) {
+			currentCardUrl = value.cardFace;
+			trackGreenThird.textContent -= 1;
+		}
+	});
+	brownCardsData.forEach(value => {
+		if (value.id === currentCard) {
+			currentCardUrl = value.cardFace;
+			trackBrownThird.textContent -= 1;
+		}
+	});
+	blueCardsData.forEach(value => {
+		if (value.id === currentCard) {
+			currentCardUrl = value.cardFace;
+			trackBlueThird.textContent -= 1;
+		}
+	});
+} 
+// Если карты закончились - дека прячется
+cardsQuantity--;
+if (cardsQuantity === 0) {
+	deckShirt.classList.add('hider');
+}
+//Отображение текущей выложенной карты
+const card = document.createElement('img');
+card.src = currentCardUrl;
+card.classList.add('deck-stack');
+openCard.append(card);
+}
 
 //Получение элементов DOM-дерева
 const deckShirt = document.querySelector('.deck-shirt');
@@ -124,6 +192,7 @@ const trackBlueSecond = document.querySelector('.bl2');
 const trackGreenThird = document.querySelector('.g3');
 const trackBrownThird = document.querySelector('.br3');
 const trackBlueThird = document.querySelector('.bl3');
+const openCard = document.querySelector('.open-card');
 
 
 
@@ -132,11 +201,11 @@ const trackBlueThird = document.querySelector('.bl3');
 
 
 
-//Объявляем архивы идентификторов карт
+//Объявляем архивы id карт
 const blueCardsId = [];
 const brownCardsId = [];
 const greenCardsId = [];
-//Заполняем архивы идентификаторов карт согласно сложности
+//Заполняем архивы id карт согласно сложности
 getSimpleDeck (greenCardsData, greenCardsId);
 getSimpleDeck (brownCardsData, brownCardsId);
 getSimpleDeck (blueCardsData, blueCardsId);
@@ -150,22 +219,13 @@ getStageDecks('azathoth');
 let cardsQuantity = stageOneCards.length + stageTwoCards.length + stageThreeCards.length;
 
 setTracker('azathoth');
+shuffle(stageOneCards);
+shuffle(stageTwoCards);
+shuffle(stageThreeCards);
 
 
 
-
-
-deckShirt.addEventListener('click', () => {
-	if (stageOneCards.length > 0) {
-		if (blueCardsData.id.includes(stageOneCards.shift())) {
-			
-		}
-	}
-	cardsQuantity--;
-	if (cardsQuantity === 0) {
-		deckShirt.classList.add('hider');
-	}
-	console.log(cardsQuantity);
-});
+//Слушатель клика по колоде
+deckShirt.addEventListener('click', getCardsOn);
 
 
