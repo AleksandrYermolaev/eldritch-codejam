@@ -181,9 +181,30 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: inherit;}
 .open-card {
 	width: 70%;
 }
+.restart {
+	width: 250px;
+	height: 50px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 20px;
+	border-radius: 10px;
+	align-self: center;
+}
 .hider {
 	display: none;
 }
 .deck-stack {
 	position: absolute;
 }
+
+::-webkit-scrollbar {
+	width: 10px;
+}
+::-webkit-scrollbar-track {
+	-webkit-box-shadow: 5px 5px 5px -5px rgba(34, 60, 80, 0.2) inset;
+	background-color: #f9f9fd;
+	border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	background: linear-gradient(180deg, #00c6fb, #005bea);
+  }

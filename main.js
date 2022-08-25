@@ -27,6 +27,52 @@ function getSimpleDeck (data, output) {
 		}
 	});
 }
+//Функция сбора колоды для легкой сложности
+function getEasyDeck (data, output) {
+	data.forEach(value => {
+		if (value.difficulty !== 'hard') {
+			output.push(value.id);
+		}
+	});
+	shuffle(output);
+}
+//Функция сбора колоды для обычной сложности
+function getNormalDeck (data, output) {
+	data.forEach(value => {
+		output.push(value.id);
+	});
+	shuffle(output);
+}
+//Функция сбора колоды для высокой сложности
+function getHardDeck (data, output) {
+	data.forEach(value => {
+		if (value.difficulty !== 'easy') {
+			output.push(value.id);
+		}
+	});
+	shuffle(output);
+}
+//Функция сбора общей колоды для очень высокой сложности
+function getHellDeck (data, output) {
+	data.forEach(value => {
+		if (value.difficulty === 'hard') {
+			output.push(value.id);
+		}
+	});
+	data.forEach(value => {
+		if (value.difficulty === 'normal') {
+			output.push(value.id);
+		}
+	});
+}
+//Общая функция переключения сложности
+function currentDifficult(data, output) {
+	if (settings.difficulty === 'simple') getSimpleDeck(data, output);
+	if (settings.difficulty === 'easy') getEasyDeck(data, output);
+	if (settings.difficulty === 'normal') getNormalDeck(data, output);
+	if (settings.difficulty === 'hard') getHardDeck(data, output);
+	if (settings.difficulty === 'hell') getHellDeck(data, output);
+}
 //Функция сбора колод по стадиям
 function getStageDecks (ancient) {
 	ancientsData.forEach(value => {
@@ -211,6 +257,21 @@ function chooseAncient() {
 		if (settings.ancient && settings.difficulty) {
 			startButton.classList.remove('hider');
 			playTable.classList.add('hider');
+			restart.classList.add('hider');
+		}
+		cleanTable();
+	});
+}
+//Функция выбора сложности
+function chooseDifficult() {
+	difficultRadios.forEach(node => {
+		if (node.checked === true) {
+			settings.difficulty = node.value;
+		}
+		if (settings.ancient && settings.difficulty) {
+			startButton.classList.remove('hider');
+			playTable.classList.add('hider');
+			restart.classList.add('hider');
 		}
 		cleanTable();
 	});
@@ -220,11 +281,12 @@ function letsPlay() {
 	//Скрываем кнопку и показываем стол
 	startButton.classList.add('hider');
 	playTable.classList.remove('hider');
+	restart.classList.remove('hider');
 	
 	//Заполняем архивы id карт согласно сложности
-	getSimpleDeck (greenCardsData, greenCardsId);
-	getSimpleDeck (brownCardsData, brownCardsId);
-	getSimpleDeck (blueCardsData, blueCardsId);
+	currentDifficult(greenCardsData, greenCardsId);
+	currentDifficult(brownCardsData, brownCardsId);
+	currentDifficult(blueCardsData, blueCardsId);
 
 	//Получаем колоду карт для древнего
 	getStageDecks(settings.ancient);
@@ -243,7 +305,11 @@ function letsPlay() {
 	//Слушатель клика, раскладывает колоду
 	deckShirt.addEventListener('click', getCardsOn);
 }
-
+//Функция перезапуска
+function restartTable() {
+	cleanTable();
+	letsPlay();
+}
 
 //Получение элементов DOM-дерева
 const deckShirt = document.querySelector('.deck-shirt');
@@ -260,12 +326,14 @@ const openCard = document.querySelector('.open-card');
 const ancientRadios = document.querySelectorAll('.ancient-radio');
 const startButton = document.querySelector('.knead-container');
 const playTable = document.querySelector('.deck-container');
+const difficultRadios = document.querySelectorAll('.difficult-radio');
+const restart = document.querySelector('.restart');
 
 
 //Настройки
 const settings = {
 	ancient: undefined,
-	difficulty: 'simple'
+	difficulty: undefined
 };
 
 //Объявляем константы и переменные
@@ -285,8 +353,16 @@ ancientRadios.forEach(value => {
 	value.addEventListener('change', chooseAncient)
 });
 
+//Слушатель на выбор сложности
+difficultRadios.forEach(value => {
+	value.addEventListener('change', chooseDifficult)
+});
+
 //Слушатель на кнопку старт - запуск стола
 startButton.addEventListener('click', letsPlay);
+
+//Слушатель на кнопку замешать заново
+restart.addEventListener('click', restartTable);
 
 
 
