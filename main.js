@@ -9,7 +9,7 @@ function shuffle (deck) {
 		[deck[i], deck[j]] = [deck[j], deck[i]];
 	}
 }
-//Функция сбора общей колоды в для очень легкой сложности
+//Функция сбора общей колоды для очень легкой сложности
 function getSimpleDeck (data, output) {
 	data.forEach(value => {
 		if (value.difficulty === 'easy') {
@@ -31,52 +31,62 @@ function getSimpleDeck (data, output) {
 function getStageDecks (ancient) {
 	ancientsData.forEach(value => {
 		if (value.id === ancient) {
+//Замешиваем нужное количество кард каждого цвета
+		const allGreen = value.firstStage.greenCards + value.secondStage.greenCards + value.thirdStage.greenCards;
+		const allBrown = value.firstStage.brownCards + value.secondStage.brownCards + value.thirdStage.brownCards;
+		const allBlue = value.firstStage.blueCards + value.secondStage.blueCards + value.thirdStage.blueCards;
+		const greenCardsSet = greenCardsId.slice(0, allGreen);
+		const brownCardsSet = brownCardsId.slice(0, allBrown);
+		const blueCardsSet = blueCardsId.slice(0, allBlue);
+		shuffle(greenCardsSet);
+		shuffle(brownCardsSet);
+		shuffle(blueCardsSet);
 //Первая стадия
 			if (value.firstStage.greenCards !== 0) {
 				for (let i = 0; i < value.firstStage.greenCards; i++) {
-					stageOneCards.push(greenCardsId[i]);
+					stageOneCards.push(greenCardsSet[i]);
 				}
 			}
 			if (value.firstStage.brownCards !== 0) {
 				for (let i = 0; i < value.firstStage.brownCards; i++) {
-					stageOneCards.push(brownCardsId[i]);
+					stageOneCards.push(brownCardsSet[i]);
 				}
 			}
 			if (value.firstStage.blueCards !== 0) {
 				for (let i = 0; i < value.firstStage.blueCards; i++) {
-					stageOneCards.push(blueCardsId[i]);
+					stageOneCards.push(blueCardsSet[i]);
 				}
 			}
 //Вторая стадия
 			if (value.secondStage.greenCards !== 0) {
 				for (let i = value.firstStage.greenCards; i < (value.secondStage.greenCards + value.firstStage.greenCards); i++) {
-					stageTwoCards.push(greenCardsId[i]);
+					stageTwoCards.push(greenCardsSet[i]);
 				}
 			}
 			if (value.secondStage.brownCards !== 0) {
 				for (let i = value.firstStage.brownCards; i < (value.secondStage.brownCards + value.firstStage.brownCards); i++) {
-					stageTwoCards.push(brownCardsId[i]);
+					stageTwoCards.push(brownCardsSet[i]);
 				}
 			}
 			if (value.secondStage.blueCards !== 0) {
 				for (let i = value.firstStage.blueCards; i < (value.secondStage.blueCards + value.firstStage.blueCards); i++) {
-					stageTwoCards.push(blueCardsId[i]);
+					stageTwoCards.push(blueCardsSet[i]);
 				}
 			}
 //Третья стадия	
 			if (value.thirdStage.greenCards !== 0) {
 				for (let i = (value.secondStage.greenCards + value.firstStage.greenCards); i < (value.secondStage.greenCards + value.firstStage.greenCards + value.thirdStage.greenCards); i++) {
-					stageThreeCards.push(greenCardsId[i]);
+					stageThreeCards.push(greenCardsSet[i]);
 				}
 			}
 			if (value.thirdStage.brownCards !== 0) {
 				for (let i = (value.secondStage.brownCards + value.firstStage.brownCards); i < (value.secondStage.brownCards + value.firstStage.brownCards + value.thirdStage.brownCards); i++) {
-					stageThreeCards.push(brownCardsId[i]);
+					stageThreeCards.push(brownCardsSet[i]);
 				}
 			}
 			if (value.thirdStage.blueCards !== 0) {
 				for (let i = (value.secondStage.blueCards + value.firstStage.blueCards); i < (value.secondStage.blueCards + value.firstStage.blueCards + value.thirdStage.blueCards); i++) {
-					stageThreeCards.push(blueCardsId[i]);
+					stageThreeCards.push(blueCardsSet[i]);
 				}
 			}
 		}
@@ -180,6 +190,60 @@ card.src = currentCardUrl;
 card.classList.add('deck-stack');
 openCard.append(card);
 }
+//Функция очистки стола
+function cleanTable() {
+	blueCardsId.splice(0);
+	brownCardsId.splice(0);
+	greenCardsId.splice(0);
+	stageOneCards.splice(0);
+	stageTwoCards.splice(0);
+	stageThreeCards.splice(0);
+	cardsQuantity = 0;
+	openCard.innerHTML = '';
+	deckShirt.classList.remove('hider');
+}
+//Функция выбора древнего
+function chooseAncient() {
+	ancientRadios.forEach(node => {
+		if (node.checked === true) {
+			settings.ancient = node.value;
+		}
+		if (settings.ancient && settings.difficulty) {
+			startButton.classList.remove('hider');
+			playTable.classList.add('hider');
+		}
+		cleanTable();
+	});
+}
+//Функция запуска стола
+function letsPlay() {
+	//Скрываем кнопку и показываем стол
+	startButton.classList.add('hider');
+	playTable.classList.remove('hider');
+	
+	//Заполняем архивы id карт согласно сложности
+	getSimpleDeck (greenCardsData, greenCardsId);
+	getSimpleDeck (brownCardsData, brownCardsId);
+	getSimpleDeck (blueCardsData, blueCardsId);
+
+	//Получаем колоду карт для древнего
+	getStageDecks(settings.ancient);
+
+	//Устанавливаем начальное значение для счетчика
+	cardsQuantity = stageOneCards.length + stageTwoCards.length + stageThreeCards.length;
+
+	//Заполняем трекер цифрами
+	setTracker(settings.ancient);
+
+	//Мешаем колоды по стадиям
+	shuffle(stageOneCards);
+	shuffle(stageTwoCards);
+	shuffle(stageThreeCards);
+
+	//Слушатель клика, раскладывает колоду
+	deckShirt.addEventListener('click', getCardsOn);
+}
+
 
 //Получение элементов DOM-дерева
 const deckShirt = document.querySelector('.deck-shirt');
@@ -193,39 +257,40 @@ const trackGreenThird = document.querySelector('.g3');
 const trackBrownThird = document.querySelector('.br3');
 const trackBlueThird = document.querySelector('.bl3');
 const openCard = document.querySelector('.open-card');
+const ancientRadios = document.querySelectorAll('.ancient-radio');
+const startButton = document.querySelector('.knead-container');
+const playTable = document.querySelector('.deck-container');
 
 
+//Настройки
+const settings = {
+	ancient: undefined,
+	difficulty: 'simple'
+};
 
-
-
-
-
-
-//Объявляем архивы id карт
-const blueCardsId = [];
-const brownCardsId = [];
-const greenCardsId = [];
-//Заполняем архивы id карт согласно сложности
-getSimpleDeck (greenCardsData, greenCardsId);
-getSimpleDeck (brownCardsData, brownCardsId);
-getSimpleDeck (blueCardsData, blueCardsId);
-
-
-
+//Объявляем константы и переменные
+//архивы id карт
+const blueCardsId = [],
+	  brownCardsId = [],
+	  greenCardsId = [];
+//архивы карт по стадиям
 const stageOneCards = [],
 	  stageTwoCards = [],
 	  stageThreeCards = [];
-getStageDecks('azathoth');
-let cardsQuantity = stageOneCards.length + stageTwoCards.length + stageThreeCards.length;
+//счетчик карт в колоде
+let cardsQuantity;
 
-setTracker('azathoth');
-shuffle(stageOneCards);
-shuffle(stageTwoCards);
-shuffle(stageThreeCards);
+//Слушатель на выбор древнего
+ancientRadios.forEach(value => {
+	value.addEventListener('change', chooseAncient)
+});
+
+//Слушатель на кнопку старт - запуск стола
+startButton.addEventListener('click', letsPlay);
 
 
 
-//Слушатель клика по колоде
-deckShirt.addEventListener('click', getCardsOn);
+
+
 
 
