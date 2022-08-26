@@ -1,6 +1,6 @@
-import blueCardsData from './data/MythicCards/blue/index.js';
-import brownCardsData from './data/MythicCards/brown/index.js';
-import greenCardsData from './data/MythicCards/green/index.js';
+import blueCardsData from './data/mythicCards/blue/blue.js';
+import brownCardsData from './data/mythicCards/brown/brown.js';
+import greenCardsData from './data/mythicCards/green/green.js';
 import ancientsData from './data/ancients.js';
 //Функция замеса колоды - перемешиваем архив
 function shuffle (deck) {
