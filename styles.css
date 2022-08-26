@@ -36,6 +36,7 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: inherit;}
 	font-size: 24px;
 	color: #ffffff;
 	margin: 10px 0;
+	text-shadow: 0px 0px 20px #660007;
 }
 .acients-container {
 	width: 100%;
@@ -55,7 +56,8 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: inherit;}
 	transition: all 0.5s ease;
 }
 .radio:checked + .ancient {
-	box-shadow: 0 0 15px white;
+	box-shadow: 0 0 10px white, 0 0 15px #660007;
+	transform: scale(105%);
 }
 .ancient-img {
 	width: 100%;
@@ -88,6 +90,7 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: inherit;}
 .field-container {
 	display: flex;
 	flex-direction: column;
+	justify-content: space-between;
 	flex: 1 0 50%;
 	
 }
@@ -100,6 +103,11 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: inherit;}
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 20px;
 	border-radius: 10px;
+	transition: all 0.5s ease;
+}
+.knead-container:hover {
+	background-color: #660007;
+	color: #ffffff;
 }
 .deck-container {
 	display: flex;
@@ -188,6 +196,16 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: inherit;}
 	font-size: 20px;
 	border-radius: 10px;
 	align-self: center;
+	transition: all 0.5s ease;
+}
+.restart:active {
+	background: #660007;
+	color: #ffffff;
+	transform: translateY(3px);
+}
+.restart:hover {
+	background-color: #660007;
+	color: #ffffff;
 }
 .hider {
 	display: none;
@@ -195,16 +213,14 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: inherit;}
 .deck-stack {
 	position: absolute;
 }
-
 ::-webkit-scrollbar {
 	width: 10px;
 }
 ::-webkit-scrollbar-track {
-	-webkit-box-shadow: 5px 5px 5px -5px rgba(34, 60, 80, 0.2) inset;
-	background-color: #f9f9fd;
+	background-color: #cfcfcf7b;
 	border-radius: 10px;
   }
-  ::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
 	border-radius: 10px;
-	background: linear-gradient(180deg, #00c6fb, #005bea);
+	background: linear-gradient(180deg, #260707, #660007);
   }
